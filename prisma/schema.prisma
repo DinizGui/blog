@@ -1,0 +1,44 @@
+// Dev Junior — schema MySQL
+// Após editar: `npx prisma migrate dev --name init` para aplicar
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique @db.VarChar(160)
+  name         String   @db.VarChar(120)
+  passwordHash String   @db.VarChar(255)
+  isAdmin      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(220)
+  slug        String   @unique @db.VarChar(220)
+  excerpt     String   @db.Text
+  content     String   @db.LongText
+  category    String   @db.VarChar(60)
+  tags        Json
+  coverImage  String   @db.VarChar(500)
+  readTime    Int      @default(3)
+  featured    Boolean  @default(false)
+  authorName  String   @default("Guilherme Diniz") @db.VarChar(120)
+  authorAvatar String  @default("https://api.dicebear.com/9.x/notionists/svg?seed=devjunior&backgroundColor=b6e3f4") @db.VarChar(500)
+  authorBio   String   @default("Dev junior aprendendo todo dia, anotando o que aprendo aqui.") @db.VarChar(500)
+  publishedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([publishedAt])
+}
