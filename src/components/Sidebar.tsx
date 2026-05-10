@@ -23,19 +23,20 @@ export async function Sidebar() {
             alt={author.name}
             width={40}
             height={40}
-            className="rounded-full bg-zinc-900 border border-zinc-800"
+            unoptimized
+            className="rounded-full bg-card-solid border border-line"
           />
           <div>
-            <p className="text-sm font-medium text-zinc-100 leading-tight">{author.name}</p>
-            <p className="text-xs text-zinc-500">{author.role}</p>
+            <p className="text-sm font-medium text-foreground leading-tight">{author.name}</p>
+            <p className="text-xs text-subtle">{author.role}</p>
           </div>
         </div>
-        <p className="text-sm text-zinc-400 leading-relaxed mb-3">{author.bio}</p>
+        <p className="text-sm text-muted leading-relaxed mb-3">{author.bio}</p>
         <a
           href={`https://github.com/${author.github}`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-200 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-subtle hover:text-foreground transition-colors"
         >
           <Github size={12} /> github.com/{author.github}
         </a>
@@ -49,10 +50,10 @@ export async function Sidebar() {
               <li key={cat.name}>
                 <Link
                   href={`/articles?category=${encodeURIComponent(cat.name)}`}
-                  className="flex items-center justify-between text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+                  className="flex items-center justify-between text-sm text-muted hover:text-foreground transition-colors group"
                 >
-                  <span>{cat.name}</span>
-                  <span className="text-xs text-zinc-600 font-mono">{cat.count}</span>
+                  <span className="group-hover:translate-x-0.5 transition-transform">{cat.name}</span>
+                  <span className="text-xs text-faint font-mono">{cat.count}</span>
                 </Link>
               </li>
             ))}
@@ -63,12 +64,12 @@ export async function Sidebar() {
       {tags.length > 0 && (
         <section>
           <h3 className="eyebrow mb-3">Tags</h3>
-          <div className="flex flex-wrap gap-x-3 gap-y-1">
+          <div className="flex flex-wrap gap-x-3 gap-y-1.5">
             {tags.map((tag) => (
               <Link
                 key={tag}
                 href={`/articles?tag=${encodeURIComponent(tag)}`}
-                className="text-xs text-zinc-500 hover:text-zinc-200 transition-colors"
+                className="text-xs text-subtle hover:text-foreground transition-colors"
               >
                 #{tag}
               </Link>
@@ -77,9 +78,9 @@ export async function Sidebar() {
         </section>
       )}
 
-      <section className="pt-1 border-t border-zinc-800">
+      <section className="pt-1 border-t border-line">
         <h3 className="eyebrow mb-3 mt-3">Newsletter</h3>
-        <p className="text-xs text-zinc-500 mb-3 leading-relaxed">
+        <p className="text-xs text-subtle mb-3 leading-relaxed">
           Receba os novos posts no e-mail.
         </p>
         <form className="space-y-2">

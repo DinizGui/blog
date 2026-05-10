@@ -32,12 +32,12 @@ export default async function ArticlesPage({ searchParams }: SearchParams) {
 
   return (
     <div className="container-blog pt-12 pb-10">
-      <header className="mb-8 pb-6 border-b border-zinc-800 animate-fade-in-up">
+      <header className="mb-8 pb-6 border-b border-line animate-fade-in-up">
         <p className="eyebrow mb-2">{filterLabel ?? 'Arquivo'}</p>
-        <h1 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-2">
+        <h1 className="text-3xl sm:text-4xl font-semibold text-foreground tracking-tight mb-2">
           {filterLabel ?? 'Todos os artigos'}
         </h1>
-        <p className="text-zinc-400">
+        <p className="text-muted">
           {filtered.length} {filtered.length === 1 ? 'post' : 'posts'}
         </p>
       </header>
@@ -45,8 +45,8 @@ export default async function ArticlesPage({ searchParams }: SearchParams) {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-12">
         <section>
           {filtered.length === 0 ? (
-            <div className="border border-zinc-800 rounded-xl p-10 text-center bg-zinc-900/30">
-              <p className="text-zinc-400">Nada encontrado com esse filtro.</p>
+            <div className="card-surface p-10 text-center">
+              <p className="text-muted">Nada encontrado com esse filtro.</p>
             </div>
           ) : (
             filtered.map((post, i) => <PostListItem key={post.id} post={post} index={i} />)

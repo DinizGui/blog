@@ -28,21 +28,22 @@ export default async function AboutPage() {
 
   return (
     <div className="container-blog pt-12 pb-12">
-      <section className="grid sm:grid-cols-[auto_1fr] gap-7 items-start mb-14 pb-12 border-b border-zinc-800 animate-fade-in-up">
+      <section className="grid sm:grid-cols-[auto_1fr] gap-7 items-start mb-14 pb-12 border-b border-line animate-fade-in-up">
         <Image
           src={author.avatar}
           alt={author.name}
           width={104}
           height={104}
-          className="rounded-full bg-zinc-900 border border-zinc-800"
+          unoptimized
+          className="rounded-full bg-card-solid border border-line"
         />
         <div>
           <p className="eyebrow mb-3">Quem escreve</p>
-          <h1 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-foreground tracking-tight mb-2">
             {author.name}
           </h1>
-          <p className="text-zinc-400 mb-5">Desenvolvedor júnior · Full-stack em formação</p>
-          <p className="text-zinc-300 leading-relaxed mb-6 max-w-2xl">{author.bio}</p>
+          <p className="text-muted mb-5">Desenvolvedor júnior · Full-stack em formação</p>
+          <p className="text-foreground/90 leading-relaxed mb-6 max-w-2xl">{author.bio}</p>
           <div className="flex flex-wrap items-center gap-2">
             <a
               href="https://github.com/DinizGui"
@@ -62,19 +63,20 @@ export default async function AboutPage() {
       </section>
 
       <section className="mb-14 animate-fade-in-up delay-100">
-        <h2 className="text-xl font-semibold text-white tracking-tight mb-6">Stack</h2>
+        <h2 className="text-xl font-semibold text-foreground tracking-tight mb-6">Stack</h2>
         <div className="space-y-4">
           {skills.map((s, i) => (
             <div key={s.label}>
               <div className="flex justify-between mb-1.5">
-                <span className="text-sm text-zinc-200">{s.label}</span>
-                <span className="text-xs text-zinc-500 font-mono">{s.level}%</span>
+                <span className="text-sm text-foreground">{s.label}</span>
+                <span className="text-xs text-subtle font-mono">{s.level}%</span>
               </div>
-              <div className="w-full bg-zinc-900 rounded-full h-1 overflow-hidden border border-zinc-800">
+              <div className="w-full bg-input rounded-full h-1 overflow-hidden border border-line">
                 <div
-                  className="h-full bg-zinc-300 animate-skill"
+                  className="h-full animate-skill"
                   style={{
                     width: `${s.level}%`,
+                    background: 'var(--accent)',
                     animationDelay: `${i * 0.05}s`,
                   }}
                 />
@@ -86,10 +88,10 @@ export default async function AboutPage() {
 
       <section className="animate-fade-in-up delay-200">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white tracking-tight">Posts recentes</h2>
+          <h2 className="text-xl font-semibold text-foreground tracking-tight">Posts recentes</h2>
           <Link
             href="/articles"
-            className="text-sm text-zinc-400 hover:text-white transition-colors"
+            className="text-sm text-muted hover:text-foreground transition-colors"
           >
             Ver todos →
           </Link>

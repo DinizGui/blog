@@ -1,12 +1,13 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { Loader2, UserPlus } from 'lucide-react'
+import { AlertCircle, Eye, EyeOff, Loader2, UserPlus } from 'lucide-react'
 import { registerAction, type RegisterState } from '@/app/register/actions'
 
 export function RegisterForm() {
   const [state, formAction] = useActionState<RegisterState, FormData>(registerAction, null)
+  const [showPwd, setShowPwd] = useState(false)
 
   return (
     <form action={formAction} className="space-y-4">
@@ -40,21 +41,37 @@ export function RegisterForm() {
 
       <div>
         <label htmlFor="password" className="label">Senha</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
-          className="input-field"
-          placeholder="Mínimo 8 caracteres"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            type={showPwd ? 'text' : 'password'}
+            required
+            minLength={8}
+            autoComplete="new-password"
+            className="input-field pr-10"
+            placeholder="Mínimo 8 caracteres"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPwd((s) => !s)}
+            tabIndex={-1}
+            aria-label={showPwd ? 'Esconder senha' : 'Mostrar senha'}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded text-subtle hover:text-foreground transition-colors"
+          >
+            {showPwd ? <EyeOff size={15} /> : <Eye size={15} />}
+          </button>
+        </div>
       </div>
 
       {state && !state.ok && (
-        <div className="text-sm text-red-300 border border-red-900/60 bg-red-950/40 rounded-md px-3 py-2 animate-fade-in">
-          {state.error}
+        <div
+          key={state.error}
+          role="alert"
+          className="flex items-start gap-2 text-sm alert-danger px-3 py-2.5 animate-shake"
+        >
+          <AlertCircle size={15} className="mt-0.5 shrink-0" />
+          <span>{state.error}</span>
         </div>
       )}
 

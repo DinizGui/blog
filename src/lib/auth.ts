@@ -6,14 +6,19 @@ const COOKIE_NAME = 'devjunior_session'
 const SESSION_DAYS = 7
 export const SESSION_COOKIE_NAME = COOKIE_NAME
 
-function getSecret(): Uint8Array {
+const SECRET_MISSING_MSG =
+  'AUTH_SECRET ausente ou < 32 chars. Defina no .env (gere com: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))")'
+
+function readSecret(): Uint8Array | null {
   const secret = process.env.AUTH_SECRET
-  if (!secret || secret.length < 32) {
-    throw new Error(
-      'AUTH_SECRET ausente ou < 32 chars. Defina no .env (gere com node -e "..."',
-    )
-  }
+  if (!secret || secret.length < 32) return null
   return new TextEncoder().encode(secret)
+}
+
+function requireSecret(): Uint8Array {
+  const key = readSecret()
+  if (!key) throw new Error(SECRET_MISSING_MSG)
+  return key
 }
 
 export interface SessionUser {
@@ -34,7 +39,7 @@ export async function createSession(user: SessionUser) {
     .setSubject(user.id)
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DAYS}d`)
-    .sign(getSecret())
+    .sign(requireSecret())
 
   const jar = await cookies()
   jar.set(COOKIE_NAME, token, {
@@ -55,8 +60,12 @@ export async function getSession(): Promise<SessionPayload | null> {
   const jar = await cookies()
   const token = jar.get(COOKIE_NAME)?.value
   if (!token) return null
+
+  const key = readSecret()
+  if (!key) return null
+
   try {
-    const { payload } = await jwtVerify(token, getSecret())
+    const { payload } = await jwtVerify(token, key)
     return payload as unknown as SessionPayload
   } catch {
     return null
@@ -71,7 +80,6 @@ export async function requireAdmin(): Promise<SessionPayload> {
   return session
 }
 
-/** Lista de e-mails que viram admin automático (definida em ADMIN_EMAILS no .env) */
 export function adminEmailsFromEnv(): string[] {
   return (process.env.ADMIN_EMAILS ?? '')
     .split(',')

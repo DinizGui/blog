@@ -23,14 +23,11 @@ export function UserMenu({ user }: { user: SessionPayload | null }) {
       <div className="hidden sm:flex items-center gap-1">
         <Link
           href="/login"
-          className="text-sm text-zinc-300 hover:text-white px-3 py-1.5 rounded-md hover:bg-zinc-900 transition-colors"
+          className="text-sm text-muted hover:text-foreground px-3 py-1.5 rounded-md hover:bg-card transition-colors"
         >
           Entrar
         </Link>
-        <Link
-          href="/register"
-          className="text-sm font-medium text-zinc-950 bg-zinc-100 hover:bg-white px-3 py-1.5 rounded-md transition-colors"
-        >
+        <Link href="/register" className="btn-primary text-sm">
           Cadastrar
         </Link>
       </div>
@@ -44,53 +41,56 @@ export function UserMenu({ user }: { user: SessionPayload | null }) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-zinc-900 transition-colors"
+        className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-card transition-colors"
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <div className="w-7 h-7 rounded-full border border-zinc-700 bg-zinc-900 flex items-center justify-center text-xs font-semibold text-zinc-200">
+        <div className="w-7 h-7 rounded-full border border-line-strong bg-card-solid flex items-center justify-center text-xs font-semibold text-foreground">
           {initial}
         </div>
-        <span className="hidden sm:inline text-sm text-zinc-300">{user.name}</span>
+        <span className="hidden sm:inline text-sm text-foreground">{user.name}</span>
         {user.isAdmin && (
-          <span className="hidden sm:inline-flex items-center text-[10px] font-bold uppercase tracking-wider text-zinc-300 border border-zinc-700 px-1.5 py-0.5 rounded">
+          <span className="hidden sm:inline-flex items-center text-[10px] font-bold uppercase tracking-wider text-foreground/80 border border-line-strong px-1.5 py-0.5 rounded">
             admin
           </span>
         )}
-        <ChevronDown size={13} className="text-zinc-500" />
+        <ChevronDown size={13} className="text-subtle" />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl overflow-hidden animate-fade-in z-50">
-          <div className="px-3 py-2.5 border-b border-zinc-800">
-            <p className="text-sm font-medium text-zinc-100 leading-tight">{user.name}</p>
-            <p className="text-xs text-zinc-500 truncate mt-0.5">{user.email}</p>
+        <div
+          className="absolute right-0 mt-2 w-56 rounded-lg border border-line bg-elevated overflow-hidden animate-fade-in z-50"
+          style={{ boxShadow: 'var(--shadow-popover)' }}
+        >
+          <div className="px-3 py-2.5 border-b border-line">
+            <p className="text-sm font-medium text-foreground leading-tight">{user.name}</p>
+            <p className="text-xs text-subtle truncate mt-0.5">{user.email}</p>
           </div>
           <div className="py-1">
             {user.isAdmin && (
               <Link
                 href="/painel"
-                className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-900 hover:text-white transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-card transition-colors"
                 onClick={() => setOpen(false)}
               >
                 <LayoutDashboard size={14} />
                 Painel
-                <Shield size={11} className="ml-auto text-zinc-500" />
+                <Shield size={11} className="ml-auto text-subtle" />
               </Link>
             )}
             <Link
               href="/about"
-              className="flex items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-card transition-colors"
               onClick={() => setOpen(false)}
             >
               <UserIcon size={14} />
               Sobre o blog
             </Link>
           </div>
-          <form action={logoutAction} className="border-t border-zinc-800">
+          <form action={logoutAction} className="border-t border-line">
             <button
               type="submit"
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-white transition-colors"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-card transition-colors"
             >
               <LogOut size={14} />
               Sair

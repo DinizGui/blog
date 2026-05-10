@@ -43,7 +43,7 @@ export default async function PostPage({ params }: Props) {
     <div className="container-wide pt-10 pb-10">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors mb-10 group animate-fade-in"
+        className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground transition-colors mb-10 group animate-fade-in"
       >
         <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
         Voltar
@@ -51,39 +51,40 @@ export default async function PostPage({ params }: Props) {
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
         <article className="animate-fade-in-up max-w-3xl">
-          <header className="mb-8">
-            <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-500 mb-5">
-              <span className="eyebrow">{post.category}</span>
-              <span>·</span>
+          <header className="mb-10">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-subtle mb-6">
+              <span className="eyebrow !text-accent">{post.category}</span>
+              <span aria-hidden>·</span>
               <time>{dateFormatted}</time>
-              <span>·</span>
+              <span aria-hidden>·</span>
               <span className="inline-flex items-center gap-1">
                 <Clock size={11} /> {post.readTime} min de leitura
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-[40px] font-semibold text-white leading-[1.15] mb-5 tracking-tight">
+            <h1 className="text-3xl sm:text-[42px] font-semibold text-foreground leading-[1.1] mb-6 tracking-tight">
               {post.title}
             </h1>
 
-            <p className="text-lg text-zinc-400 leading-relaxed mb-7">{post.excerpt}</p>
+            <p className="text-lg text-muted leading-relaxed mb-8">{post.excerpt}</p>
 
-            <div className="flex items-center gap-3 pb-8 border-b border-zinc-800">
+            <div className="flex items-center gap-3 pb-8 border-b border-line">
               <Image
                 src={post.author.avatar}
                 alt={post.author.name}
                 width={36}
                 height={36}
-                className="rounded-full bg-zinc-900 border border-zinc-800"
+                unoptimized
+                className="rounded-full bg-card-solid border border-line"
               />
               <div>
-                <p className="text-sm font-medium text-zinc-200 leading-none">{post.author.name}</p>
-                <p className="text-xs text-zinc-500 mt-1">Autor</p>
+                <p className="text-sm font-medium text-foreground leading-none">{post.author.name}</p>
+                <p className="text-xs text-subtle mt-1">Autor</p>
               </div>
             </div>
           </header>
 
-          <div className="relative w-full h-64 sm:h-80 mb-10 rounded-lg overflow-hidden border border-zinc-800">
+          <div className="relative w-full h-64 sm:h-96 mb-12 rounded-xl overflow-hidden border border-line">
             <Image
               src={post.coverImage}
               alt={post.title}
@@ -97,14 +98,14 @@ export default async function PostPage({ params }: Props) {
           <MarkdownContent content={post.content} />
 
           {post.tags.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-zinc-800">
+            <div className="mt-14 pt-8 border-t border-line">
               <p className="eyebrow mb-3">Tags</p>
               <div className="flex flex-wrap gap-1.5">
                 {post.tags.map((tag) => (
                   <Link
                     key={tag}
                     href={`/articles?tag=${encodeURIComponent(tag)}`}
-                    className="text-xs px-2.5 py-1 rounded-md border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors"
+                    className="text-xs px-2.5 py-1 rounded-md border border-line text-muted hover:text-foreground hover:border-line-strong transition-colors"
                   >
                     {tag}
                   </Link>
@@ -113,22 +114,23 @@ export default async function PostPage({ params }: Props) {
             </div>
           )}
 
-          <div className="mt-10 p-6 border border-zinc-800 rounded-xl bg-zinc-900/30 flex gap-5">
+          <div className="mt-12 card-surface p-6 flex gap-5">
             <Image
               src={post.author.avatar}
               alt={post.author.name}
               width={56}
               height={56}
-              className="rounded-full bg-zinc-900 border border-zinc-800 flex-shrink-0"
+              unoptimized
+              className="rounded-full bg-card-solid border border-line flex-shrink-0"
             />
             <div>
-              <p className="font-semibold text-white mb-1">{post.author.name}</p>
-              <p className="text-sm text-zinc-400 leading-relaxed mb-3">{post.author.bio}</p>
+              <p className="font-semibold text-foreground mb-1">{post.author.name}</p>
+              <p className="text-sm text-muted leading-relaxed mb-3">{post.author.bio}</p>
               <a
                 href="https://github.com/DinizGui"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-accent transition-colors"
               >
                 <Github size={13} />
                 github.com/DinizGui

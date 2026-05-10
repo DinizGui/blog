@@ -24,30 +24,43 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
     return { ok: false, error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
   }
 
-  const user = await findUserByEmail(parsed.data.email)
-  // Pequeno delay constante pra dificultar enumeração de e-mails
-  await new Promise((r) => setTimeout(r, 250))
+  let isAdmin = false
+  let safeNext = '/'
 
-  if (!user) {
-    return { ok: false, error: 'E-mail ou senha incorretos' }
+  try {
+    const user = await findUserByEmail(parsed.data.email)
+    await new Promise((r) => setTimeout(r, 250))
+
+    if (!user) {
+      return { ok: false, error: 'E-mail ou senha incorretos' }
+    }
+
+    const valid = await verifyPassword(parsed.data.password, user.passwordHash)
+    if (!valid) {
+      return { ok: false, error: 'E-mail ou senha incorretos' }
+    }
+
+    isAdmin = await syncAdminFromEnv(user.id, user.email, user.isAdmin)
+
+    await createSession({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      isAdmin,
+    })
+
+    safeNext = parsed.data.next.startsWith('/') ? parsed.data.next : '/'
+  } catch (err) {
+    if (err instanceof Error && err.message.includes('NEXT_REDIRECT')) throw err
+    console.error('[loginAction]', err)
+    const msg =
+      err instanceof Error && err.message.startsWith('AUTH_SECRET')
+        ? 'Servidor mal configurado. Avise o admin (AUTH_SECRET).'
+        : 'Não foi possível entrar agora. Tente novamente em instantes.'
+    return { ok: false, error: msg }
   }
 
-  const valid = await verifyPassword(parsed.data.password, user.passwordHash)
-  if (!valid) {
-    return { ok: false, error: 'E-mail ou senha incorretos' }
-  }
-
-  const isAdmin = await syncAdminFromEnv(user.id, user.email, user.isAdmin)
-
-  await createSession({
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    isAdmin,
-  })
-
-  const next = parsed.data.next.startsWith('/') ? parsed.data.next : '/'
-  redirect(isAdmin && next === '/' ? '/painel' : next)
+  redirect(isAdmin && safeNext === '/' ? '/painel' : safeNext)
 }
 
 export async function logoutAction() {

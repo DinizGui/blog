@@ -15,30 +15,38 @@ export default async function LoginPage({ searchParams }: Props) {
   const { next } = await searchParams
 
   return (
-    <div className="container-blog pt-16 pb-20">
-      <div className="max-w-sm mx-auto">
+    <div className="auth-shell px-4 py-12">
+      <div className="w-full max-w-sm">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors mb-10 group animate-fade-in"
+          className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground transition-colors mb-8 group animate-fade-in-down"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
           Voltar pro blog
         </Link>
 
-        <div className="animate-fade-in-up">
-          <div className="inline-flex w-10 h-10 rounded-md border border-zinc-800 bg-zinc-900 items-center justify-center mb-5">
-            <Lock size={16} className="text-zinc-400" />
+        <div className="auth-card animate-scale-in">
+          <div className="auth-icon mb-5 animate-fade-in-up">
+            <Lock size={17} />
           </div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight mb-2">Entrar</h1>
-          <p className="text-sm text-zinc-400 mb-8">
-            Acesse com sua conta para continuar.
+
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight mb-2 animate-fade-in-up delay-100">
+            Bem-vindo de volta
+          </h1>
+          <p className="text-sm text-muted mb-7 animate-fade-in-up delay-200">
+            Entre na sua conta pra continuar.
           </p>
 
-          <LoginForm next={next} />
+          <div className="animate-fade-in-up delay-300">
+            <LoginForm next={next} />
+          </div>
 
-          <p className="mt-6 text-sm text-zinc-500">
+          <p className="mt-6 text-sm text-subtle animate-fade-in-up delay-400">
             Não tem conta?{' '}
-            <Link href="/register" className="text-zinc-200 hover:text-white underline underline-offset-4 decoration-zinc-700">
+            <Link
+              href="/register"
+              className="text-foreground hover:text-accent underline underline-offset-4 decoration-line-strong hover:decoration-accent transition-colors"
+            >
               Crie uma agora
             </Link>
           </p>

@@ -20,18 +20,25 @@ async function readSession(token: string | undefined): Promise<SessionPayload | 
   }
 }
 
+function clearSessionCookie(res: NextResponse) {
+  res.cookies.set(COOKIE_NAME, '', { path: '/', maxAge: 0 })
+  return res
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const token = req.cookies.get(COOKIE_NAME)?.value
   const session = await readSession(token)
+  const hasInvalidCookie = !!token && !session
 
-  // /painel/* → exige admin
   if (pathname.startsWith('/painel')) {
     if (!session) {
       const url = req.nextUrl.clone()
       url.pathname = '/login'
       url.searchParams.set('next', pathname)
-      return NextResponse.redirect(url)
+      const res = NextResponse.redirect(url)
+      if (hasInvalidCookie) clearSessionCookie(res)
+      return res
     }
     if (!session.isAdmin) {
       const url = req.nextUrl.clone()
@@ -41,12 +48,15 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // /login e /register → se já logado, vai pro início (ou painel se admin)
   if ((pathname === '/login' || pathname === '/register') && session) {
     const url = req.nextUrl.clone()
     url.pathname = session.isAdmin ? '/painel' : '/'
     url.search = ''
     return NextResponse.redirect(url)
+  }
+
+  if (hasInvalidCookie && (pathname === '/login' || pathname === '/register')) {
+    return clearSessionCookie(NextResponse.next())
   }
 
   return NextResponse.next()

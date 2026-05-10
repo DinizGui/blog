@@ -27,6 +27,8 @@ export async function registerAction(
     return { ok: false, error: parsed.error.errors[0]?.message ?? 'Dados inválidos' }
   }
 
+  let goAdmin = false
+
   try {
     const user = await registerUser(parsed.data)
     await createSession({
@@ -35,12 +37,18 @@ export async function registerAction(
       name: user.name,
       isAdmin: user.isAdmin,
     })
-    redirect(user.isAdmin ? '/painel' : '/')
+    goAdmin = user.isAdmin
   } catch (err) {
     if (err instanceof Error && err.message.includes('NEXT_REDIRECT')) throw err
+    console.error('[registerAction]', err)
+    if (err instanceof Error && err.message.startsWith('AUTH_SECRET')) {
+      return { ok: false, error: 'Servidor mal configurado. Avise o admin (AUTH_SECRET).' }
+    }
     return {
       ok: false,
       error: err instanceof Error ? err.message : 'Erro ao criar conta',
     }
   }
+
+  redirect(goAdmin ? '/painel' : '/')
 }

@@ -13,7 +13,7 @@ export default function NovoPostPage() {
 
       <Link
         href="/painel"
-        className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-200 transition-colors mb-6 group animate-fade-in"
+        className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground transition-colors mb-6 group animate-fade-in"
       >
         <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
         Voltar pro painel
@@ -21,7 +21,7 @@ export default function NovoPostPage() {
 
       <header className="mb-8 animate-fade-in-up">
         <p className="eyebrow mb-2">Criar publicação</p>
-        <h1 className="text-3xl font-semibold text-white tracking-tight">Novo post</h1>
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">Novo post</h1>
       </header>
 
       <div className="animate-fade-in-up delay-100">

@@ -7,27 +7,36 @@ const author = {
 
 export function Hero() {
   return (
-    <section className="pt-12 sm:pt-16 pb-12 border-b border-zinc-800 animate-fade-in-up">
-      <div className="flex items-start gap-4 mb-4">
+    <section className="pt-12 sm:pt-20 pb-12 border-b border-line animate-fade-in-up">
+      <div className="flex items-center gap-3 mb-6">
+        <span className="inline-flex w-2 h-2 rounded-full bg-accent animate-glow" aria-hidden />
+        <p className="eyebrow !text-accent">Diário de bordo</p>
+      </div>
+
+      <h1 className="text-4xl sm:text-5xl font-semibold text-foreground tracking-tight leading-[1.05] mb-5 max-w-3xl">
+        Aprendendo em público,{' '}
+        <span className="text-subtle">um post de cada vez.</span>
+      </h1>
+
+      <p className="text-lg text-muted leading-relaxed max-w-2xl mb-7">
+        Notas técnicas, decisões de arquitetura e os bugs que demoraram a cair a ficha.
+        Stack: React, Next.js, TypeScript, Node.
+      </p>
+
+      <div className="flex items-center gap-3">
         <Image
           src={author.avatar}
           alt={author.name}
-          width={48}
-          height={48}
-          className="rounded-full bg-zinc-900 border border-zinc-800"
+          width={36}
+          height={36}
+          unoptimized
+          className="rounded-full bg-card-solid border border-line"
         />
-        <div>
-          <p className="eyebrow mb-1">Diário de bordo</p>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight">
-            Dev Junior
-          </h1>
+        <div className="text-sm">
+          <p className="text-foreground font-medium leading-tight">{author.name}</p>
+          <p className="text-subtle text-xs mt-0.5">Dev junior · escreve sobre o que estuda</p>
         </div>
       </div>
-      <p className="text-lg text-zinc-300 leading-relaxed max-w-3xl">
-        Notas técnicas e aprendizados de um desenvolvedor júnior em formação.
-        Escrevo aqui sobre o que estudo, decisões de arquitetura e os bugs que
-        demoraram a cair a ficha. Stack: React, Next.js, TypeScript, Node.
-      </p>
     </section>
   )
 }
