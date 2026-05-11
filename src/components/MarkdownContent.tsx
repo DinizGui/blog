@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { slugify } from '@/lib/utils'
 
 interface Props {
   content: string
@@ -21,10 +22,12 @@ export function MarkdownContent({ content }: Props) {
     <div className="prose-blog">
       {blocks.map((block, i) => {
         if (block.startsWith('## ')) {
-          return <h2 key={i}>{block.slice(3)}</h2>
+          const text = block.slice(3)
+          return <h2 key={i} id={slugify(text)} className="scroll-mt-24">{text}</h2>
         }
         if (block.startsWith('### ')) {
-          return <h3 key={i}>{block.slice(4)}</h3>
+          const text = block.slice(4)
+          return <h3 key={i} id={slugify(text)} className="scroll-mt-24">{text}</h3>
         }
         if (block.startsWith('```')) {
           const lines = block.split('\n')

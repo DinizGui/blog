@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Github } from 'lucide-react'
-import { listCategories, listAllTags } from '@/lib/posts'
+import { Github, FileText, Folder } from 'lucide-react'
+import { listCategories, listAllTags, listPosts } from '@/lib/posts'
 
 const author = {
   name: 'Guilherme Diniz',
@@ -12,39 +12,51 @@ const author = {
 }
 
 export async function Sidebar() {
-  const [categories, tags] = await Promise.all([listCategories(), listAllTags()])
+  const [categories, tags, posts] = await Promise.all([
+    listCategories(),
+    listAllTags(),
+    listPosts(),
+  ])
 
   return (
-    <aside className="space-y-9 lg:pt-2 animate-fade-in-up delay-200">
-      <section>
+    <aside className="lg:sticky lg:top-20 lg:self-start space-y-9 lg:pt-2 animate-fade-in-up delay-200">
+      <section className="card-surface p-5">
         <div className="flex items-center gap-3 mb-3">
           <Image
             src={author.avatar}
             alt={author.name}
-            width={40}
-            height={40}
+            width={44}
+            height={44}
             unoptimized
             className="rounded-full bg-card-solid border border-line"
           />
-          <div>
-            <p className="text-sm font-medium text-foreground leading-tight">{author.name}</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-foreground leading-tight truncate">{author.name}</p>
             <p className="text-xs text-subtle">{author.role}</p>
           </div>
         </div>
-        <p className="text-sm text-muted leading-relaxed mb-3">{author.bio}</p>
-        <a
-          href={`https://github.com/${author.github}`}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-subtle hover:text-foreground transition-colors"
-        >
-          <Github size={12} /> github.com/{author.github}
-        </a>
+        <p className="text-sm text-muted leading-relaxed mb-4">{author.bio}</p>
+        <div className="flex items-center justify-between pt-3 border-t border-line text-xs">
+          <a
+            href={`https://github.com/${author.github}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 text-subtle hover:text-foreground transition-colors"
+          >
+            <Github size={12} /> @{author.github}
+          </a>
+          <span className="inline-flex items-center gap-1 text-faint font-mono">
+            <FileText size={11} /> {posts.length}
+          </span>
+        </div>
       </section>
 
       {categories.length > 0 && (
         <section>
-          <h3 className="eyebrow mb-3">Categorias</h3>
+          <div className="flex items-center gap-2 mb-3">
+            <Folder size={12} className="text-subtle" />
+            <h3 className="eyebrow">Categorias</h3>
+          </div>
           <ul className="space-y-1.5">
             {categories.map((cat) => (
               <li key={cat.name}>
@@ -53,7 +65,7 @@ export async function Sidebar() {
                   className="flex items-center justify-between text-sm text-muted hover:text-foreground transition-colors group"
                 >
                   <span className="group-hover:translate-x-0.5 transition-transform">{cat.name}</span>
-                  <span className="text-xs text-faint font-mono">{cat.count}</span>
+                  <span className="text-xs text-faint font-mono">{cat.count.toString().padStart(2, '0')}</span>
                 </Link>
               </li>
             ))}
@@ -77,19 +89,6 @@ export async function Sidebar() {
           </div>
         </section>
       )}
-
-      <section className="pt-1 border-t border-line">
-        <h3 className="eyebrow mb-3 mt-3">Newsletter</h3>
-        <p className="text-xs text-subtle mb-3 leading-relaxed">
-          Receba os novos posts no e-mail.
-        </p>
-        <form className="space-y-2">
-          <input type="email" required placeholder="seu@email.com" className="input-field" />
-          <button type="submit" className="btn-primary w-full justify-center text-xs">
-            Inscrever-se
-          </button>
-        </form>
-      </section>
     </aside>
   )
 }

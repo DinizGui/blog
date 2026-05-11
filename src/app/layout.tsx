@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { SITE, siteUrl } from '@/lib/seo'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
@@ -13,17 +14,35 @@ const jetbrains = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: 'Dev Junior — diário de bordo',
-    template: '%s · Dev Junior',
+    default: SITE.title,
+    template: `%s · ${SITE.name}`,
   },
-  description:
-    'Notas técnicas e aprendizados de um desenvolvedor júnior. Por Guilherme Diniz.',
-  metadataBase: new URL('http://localhost:3000'),
+  description: SITE.description,
+  applicationName: SITE.name,
+  authors: [{ name: SITE.author }],
+  creator: SITE.author,
+  publisher: SITE.author,
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Dev Junior',
-    description: 'Notas técnicas e aprendizados de um desenvolvedor júnior.',
     type: 'website',
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    locale: SITE.locale,
+    url: '/',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE.title,
+    description: SITE.description,
+    creator: SITE.twitterHandle,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
   },
 }
 

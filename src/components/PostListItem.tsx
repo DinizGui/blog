@@ -9,32 +9,44 @@ import { cn } from '@/lib/utils'
 interface Props {
   post: Post
   index?: number
+  total?: number
 }
 
-export function PostListItem({ post, index = 0 }: Props) {
-  const dateFormatted = format(new Date(post.publishedAt), "d 'de' MMMM',' yyyy", { locale: ptBR })
+export function PostListItem({ post, index = 0, total }: Props) {
+  const dateFormatted = format(new Date(post.publishedAt), "d 'de' MMM',' yyyy", { locale: ptBR })
   const delayClass = index < 6 ? `delay-${(index + 1) * 100}` : ''
+  const editionNumber = total != null ? total - index : index + 1
 
   return (
     <article
       className={cn(
-        'group py-7 border-b border-line last:border-0 animate-fade-in-up',
+        'group relative py-8 border-b border-line last:border-0 animate-fade-in-up',
         delayClass,
       )}
     >
-      <Link href={`/post/${post.slug}`} className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-5 items-start">
+      <Link
+        href={`/post/${post.slug}`}
+        className="grid grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_auto] gap-x-5 sm:gap-x-7 items-start"
+      >
+        <div className="flex flex-col items-start gap-1 pt-1 min-w-[44px]">
+          <span className="text-xs text-faint font-mono tabular-nums">
+            #{editionNumber.toString().padStart(2, '0')}
+          </span>
+          <span className="hidden sm:block w-6 h-px bg-line-strong mt-1" aria-hidden />
+        </div>
+
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2.5 text-xs text-subtle mb-3">
             <time>{dateFormatted}</time>
-            <span aria-hidden>·</span>
-            <span className="eyebrow">{post.category}</span>
-            <span aria-hidden>·</span>
+            <span aria-hidden className="text-faint">·</span>
+            <span className="eyebrow !text-accent">{post.category}</span>
+            <span aria-hidden className="text-faint">·</span>
             <span className="inline-flex items-center gap-1">
               <Clock size={11} /> {post.readTime} min
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-[26px] font-semibold text-foreground tracking-tight leading-snug mb-2 group-hover:text-accent transition-colors">
+          <h2 className="text-2xl sm:text-[28px] font-semibold text-foreground tracking-tight leading-[1.15] mb-2.5 group-hover:text-accent transition-colors">
             {post.title}
             <ArrowUpRight
               size={18}
@@ -46,10 +58,7 @@ export function PostListItem({ post, index = 0 }: Props) {
           {post.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
               {post.tags.slice(0, 5).map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs text-subtle"
-                >
+                <span key={tag} className="text-xs text-subtle">
                   #{tag}
                 </span>
               ))}
@@ -57,13 +66,19 @@ export function PostListItem({ post, index = 0 }: Props) {
           )}
         </div>
 
-        <div className="hidden sm:block relative w-32 h-24 rounded-md overflow-hidden border border-line flex-shrink-0">
+        <div className="hidden sm:block relative w-40 h-28 rounded-lg overflow-hidden border border-line flex-shrink-0">
           <Image
             src={post.coverImage}
             alt=""
             fill
-            sizes="128px"
+            sizes="160px"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            style={{
+              background: 'linear-gradient(135deg, transparent 50%, var(--accent-soft) 100%)',
+            }}
           />
         </div>
       </Link>
